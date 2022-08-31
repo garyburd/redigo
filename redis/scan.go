@@ -380,7 +380,7 @@ var errScanStructValue = errors.New("redigo.ScanStruct: value must be non-nil po
 // ScanStruct uses exported field names to match values in the response. Use
 // 'redis' field tag to override the name:
 //
-//      Field int `redis:"myName"`
+//	Field int `redis:"myName"`
 //
 // Fields with the tag redis:"-" are ignored.
 //

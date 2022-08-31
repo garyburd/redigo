@@ -25,6 +25,8 @@ type Error string
 func (err Error) Error() string { return string(err) }
 
 // Conn represents a connection to a Redis server.
+//
+// Deprecated: This package is replaced by github.com/gomodule/redigo/redis.
 type Conn interface {
 	// Close closes the connection.
 	Close() error

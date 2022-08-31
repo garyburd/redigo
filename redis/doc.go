@@ -17,7 +17,7 @@
 // The Redigo FAQ (https://github.com/garyburd/redigo/wiki/FAQ) contains more
 // documentation about this package.
 //
-// Connections
+// # Connections
 //
 // The Conn interface is the primary interface for working with Redis.
 // Applications create connections by calling the Dial, DialWithTimeout or
@@ -27,58 +27,58 @@
 // The application must call the connection Close method when the application
 // is done with the connection.
 //
-// Executing Commands
+// # Executing Commands
 //
 // The Conn interface has a generic method for executing Redis commands:
 //
-//  Do(commandName string, args ...interface{}) (reply interface{}, err error)
+//	Do(commandName string, args ...interface{}) (reply interface{}, err error)
 //
 // The Redis command reference (http://redis.io/commands) lists the available
 // commands. An example of using the Redis APPEND command is:
 //
-//  n, err := conn.Do("APPEND", "key", "value")
+//	n, err := conn.Do("APPEND", "key", "value")
 //
 // The Do method converts command arguments to bulk strings for transmission
 // to the server as follows:
 //
-//  Go Type                 Conversion
-//  []byte                  Sent as is
-//  string                  Sent as is
-//  int, int64              strconv.FormatInt(v)
-//  float64                 strconv.FormatFloat(v, 'g', -1, 64)
-//  bool                    true -> "1", false -> "0"
-//  nil                     ""
-//  all other types         fmt.Fprint(w, v)
+//	Go Type                 Conversion
+//	[]byte                  Sent as is
+//	string                  Sent as is
+//	int, int64              strconv.FormatInt(v)
+//	float64                 strconv.FormatFloat(v, 'g', -1, 64)
+//	bool                    true -> "1", false -> "0"
+//	nil                     ""
+//	all other types         fmt.Fprint(w, v)
 //
 // Redis command reply types are represented using the following Go types:
 //
-//  Redis type              Go type
-//  error                   redis.Error
-//  integer                 int64
-//  simple string           string
-//  bulk string             []byte or nil if value not present.
-//  array                   []interface{} or nil if value not present.
+//	Redis type              Go type
+//	error                   redis.Error
+//	integer                 int64
+//	simple string           string
+//	bulk string             []byte or nil if value not present.
+//	array                   []interface{} or nil if value not present.
 //
 // Use type assertions or the reply helper functions to convert from
 // interface{} to the specific Go type for the command result.
 //
-// Pipelining
+// # Pipelining
 //
 // Connections support pipelining using the Send, Flush and Receive methods.
 //
-//  Send(commandName string, args ...interface{}) error
-//  Flush() error
-//  Receive() (reply interface{}, err error)
+//	Send(commandName string, args ...interface{}) error
+//	Flush() error
+//	Receive() (reply interface{}, err error)
 //
 // Send writes the command to the connection's output buffer. Flush flushes the
 // connection's output buffer to the server. Receive reads a single reply from
 // the server. The following example shows a simple pipeline.
 //
-//  c.Send("SET", "foo", "bar")
-//  c.Send("GET", "foo")
-//  c.Flush()
-//  c.Receive() // reply from SET
-//  v, err = c.Receive() // reply from GET
+//	c.Send("SET", "foo", "bar")
+//	c.Send("GET", "foo")
+//	c.Flush()
+//	c.Receive() // reply from SET
+//	v, err = c.Receive() // reply from GET
 //
 // The Do method combines the functionality of the Send, Flush and Receive
 // methods. The Do method starts by writing the command and flushing the output
@@ -91,13 +91,13 @@
 //
 // Use the Send and Do methods to implement pipelined transactions.
 //
-//  c.Send("MULTI")
-//  c.Send("INCR", "foo")
-//  c.Send("INCR", "bar")
-//  r, err := c.Do("EXEC")
-//  fmt.Println(r) // prints [1, 1]
+//	c.Send("MULTI")
+//	c.Send("INCR", "foo")
+//	c.Send("INCR", "bar")
+//	r, err := c.Do("EXEC")
+//	fmt.Println(r) // prints [1, 1]
 //
-// Concurrency
+// # Concurrency
 //
 // Connections support one concurrent caller to the Receive method and one
 // concurrent caller to the Send and Flush methods. No other concurrency is
@@ -108,39 +108,39 @@
 // a Pool have the concurrency restrictions described in the previous
 // paragraph.
 //
-// Publish and Subscribe
+// # Publish and Subscribe
 //
 // Use the Send, Flush and Receive methods to implement Pub/Sub subscribers.
 //
-//  c.Send("SUBSCRIBE", "example")
-//  c.Flush()
-//  for {
-//      reply, err := c.Receive()
-//      if err != nil {
-//          return err
-//      }
-//      // process pushed message
-//  }
+//	c.Send("SUBSCRIBE", "example")
+//	c.Flush()
+//	for {
+//	    reply, err := c.Receive()
+//	    if err != nil {
+//	        return err
+//	    }
+//	    // process pushed message
+//	}
 //
 // The PubSubConn type wraps a Conn with convenience methods for implementing
 // subscribers. The Subscribe, PSubscribe, Unsubscribe and PUnsubscribe methods
 // send and flush a subscription management command. The receive method
 // converts a pushed message to convenient types for use in a type switch.
 //
-//  psc := redis.PubSubConn{Conn: c}
-//  psc.Subscribe("example")
-//  for {
-//      switch v := psc.Receive().(type) {
-//      case redis.Message:
-//          fmt.Printf("%s: message: %s\n", v.Channel, v.Data)
-//      case redis.Subscription:
-//          fmt.Printf("%s: %s %d\n", v.Channel, v.Kind, v.Count)
-//      case error:
-//          return v
-//      }
-//  }
+//	psc := redis.PubSubConn{Conn: c}
+//	psc.Subscribe("example")
+//	for {
+//	    switch v := psc.Receive().(type) {
+//	    case redis.Message:
+//	        fmt.Printf("%s: message: %s\n", v.Channel, v.Data)
+//	    case redis.Subscription:
+//	        fmt.Printf("%s: %s %d\n", v.Channel, v.Kind, v.Count)
+//	    case error:
+//	        return v
+//	    }
+//	}
 //
-// Reply Helpers
+// # Reply Helpers
 //
 // The Bool, Int, Bytes, String, Strings and Values functions convert a reply
 // to a value of a specific type. To allow convenient wrapping of calls to the
@@ -149,24 +149,24 @@
 // error. If the error is nil, the function converts the reply to the specified
 // type:
 //
-//  exists, err := redis.Bool(c.Do("EXISTS", "foo"))
-//  if err != nil {
-//      // handle error return from c.Do or type conversion error.
-//  }
+//	exists, err := redis.Bool(c.Do("EXISTS", "foo"))
+//	if err != nil {
+//	    // handle error return from c.Do or type conversion error.
+//	}
 //
 // The Scan function converts elements of a array reply to Go types:
 //
-//  var value1 int
-//  var value2 string
-//  reply, err := redis.Values(c.Do("MGET", "key1", "key2"))
-//  if err != nil {
-//      // handle error
-//  }
-//   if _, err := redis.Scan(reply, &value1, &value2); err != nil {
-//      // handle error
-//  }
+//	var value1 int
+//	var value2 string
+//	reply, err := redis.Values(c.Do("MGET", "key1", "key2"))
+//	if err != nil {
+//	    // handle error
+//	}
+//	 if _, err := redis.Scan(reply, &value1, &value2); err != nil {
+//	    // handle error
+//	}
 //
-// Errors
+// # Errors
 //
 // Connection methods return error replies from the server as type redis.Error.
 //

@@ -27,11 +27,11 @@ var ErrNil = errors.New("redigo: nil returned")
 // equal to nil, then Int returns 0, err. Otherwise, Int converts the
 // reply to an int as follows:
 //
-//  Reply type    Result
-//  integer       int(reply), nil
-//  bulk string   parsed reply, nil
-//  nil           0, ErrNil
-//  other         0, error
+//	Reply type    Result
+//	integer       int(reply), nil
+//	bulk string   parsed reply, nil
+//	nil           0, ErrNil
+//	other         0, error
 func Int(reply interface{}, err error) (int, error) {
 	if err != nil {
 		return 0, err
@@ -58,11 +58,11 @@ func Int(reply interface{}, err error) (int, error) {
 // not equal to nil, then Int returns 0, err. Otherwise, Int64 converts the
 // reply to an int64 as follows:
 //
-//  Reply type    Result
-//  integer       reply, nil
-//  bulk string   parsed reply, nil
-//  nil           0, ErrNil
-//  other         0, error
+//	Reply type    Result
+//	integer       reply, nil
+//	bulk string   parsed reply, nil
+//	nil           0, ErrNil
+//	other         0, error
 func Int64(reply interface{}, err error) (int64, error) {
 	if err != nil {
 		return 0, err
@@ -87,11 +87,11 @@ var errNegativeInt = errors.New("redigo: unexpected value for Uint64")
 // not equal to nil, then Int returns 0, err. Otherwise, Int64 converts the
 // reply to an int64 as follows:
 //
-//  Reply type    Result
-//  integer       reply, nil
-//  bulk string   parsed reply, nil
-//  nil           0, ErrNil
-//  other         0, error
+//	Reply type    Result
+//	integer       reply, nil
+//	bulk string   parsed reply, nil
+//	nil           0, ErrNil
+//	other         0, error
 func Uint64(reply interface{}, err error) (uint64, error) {
 	if err != nil {
 		return 0, err
@@ -117,10 +117,10 @@ func Uint64(reply interface{}, err error) (uint64, error) {
 // not equal to nil, then Float64 returns 0, err. Otherwise, Float64 converts
 // the reply to an int as follows:
 //
-//  Reply type    Result
-//  bulk string   parsed reply, nil
-//  nil           0, ErrNil
-//  other         0, error
+//	Reply type    Result
+//	bulk string   parsed reply, nil
+//	nil           0, ErrNil
+//	other         0, error
 func Float64(reply interface{}, err error) (float64, error) {
 	if err != nil {
 		return 0, err
@@ -141,11 +141,11 @@ func Float64(reply interface{}, err error) (float64, error) {
 // equal to nil, then String returns "", err. Otherwise String converts the
 // reply to a string as follows:
 //
-//  Reply type      Result
-//  bulk string     string(reply), nil
-//  simple string   reply, nil
-//  nil             "",  ErrNil
-//  other           "",  error
+//	Reply type      Result
+//	bulk string     string(reply), nil
+//	simple string   reply, nil
+//	nil             "",  ErrNil
+//	other           "",  error
 func String(reply interface{}, err error) (string, error) {
 	if err != nil {
 		return "", err
@@ -167,11 +167,11 @@ func String(reply interface{}, err error) (string, error) {
 // is not equal to nil, then Bytes returns nil, err. Otherwise Bytes converts
 // the reply to a slice of bytes as follows:
 //
-//  Reply type      Result
-//  bulk string     reply, nil
-//  simple string   []byte(reply), nil
-//  nil             nil, ErrNil
-//  other           nil, error
+//	Reply type      Result
+//	bulk string     reply, nil
+//	simple string   []byte(reply), nil
+//	nil             nil, ErrNil
+//	other           nil, error
 func Bytes(reply interface{}, err error) ([]byte, error) {
 	if err != nil {
 		return nil, err
@@ -193,11 +193,11 @@ func Bytes(reply interface{}, err error) ([]byte, error) {
 // equal to nil, then Bool returns false, err. Otherwise Bool converts the
 // reply to boolean as follows:
 //
-//  Reply type      Result
-//  integer         value != 0, nil
-//  bulk string     strconv.ParseBool(reply)
-//  nil             false, ErrNil
-//  other           false, error
+//	Reply type      Result
+//	integer         value != 0, nil
+//	bulk string     strconv.ParseBool(reply)
+//	nil             false, ErrNil
+//	other           false, error
 func Bool(reply interface{}, err error) (bool, error) {
 	if err != nil {
 		return false, err
@@ -224,10 +224,10 @@ func MultiBulk(reply interface{}, err error) ([]interface{}, error) { return Val
 // If err is not equal to nil, then Values returns nil, err. Otherwise, Values
 // converts the reply as follows:
 //
-//  Reply type      Result
-//  array           reply, nil
-//  nil             nil, ErrNil
-//  other           nil, error
+//	Reply type      Result
+//	array           reply, nil
+//	nil             nil, ErrNil
+//	other           nil, error
 func Values(reply interface{}, err error) ([]interface{}, error) {
 	if err != nil {
 		return nil, err

@@ -60,7 +60,7 @@ type conn struct {
 // DialTimeout acts like Dial but takes timeouts for establishing the
 // connection to the server, writing a command and reading a reply.
 //
-// Deprecated: Use Dial with options instead.
+// Deprecated: This package is replaced by github.com/gomodule/redigo/redis.
 func DialTimeout(network, address string, connectTimeout, readTimeout, writeTimeout time.Duration) (Conn, error) {
 	return Dial(network, address,
 		DialConnectTimeout(connectTimeout),
@@ -167,6 +167,8 @@ func DialUseTLS(useTLS bool) DialOption {
 
 // Dial connects to the Redis server at the given network and
 // address using the specified options.
+//
+// Deprecated: This package is replaced by github.com/gomodule/redigo/redis.
 func Dial(network, address string, options ...DialOption) (Conn, error) {
 	do := dialOptions{
 		dialer: &net.Dialer{
@@ -239,6 +241,8 @@ var pathDBRegexp = regexp.MustCompile(`/(\d*)\z`)
 // DialURL connects to a Redis server at the given URL using the Redis
 // URI scheme. URLs should follow the draft IANA specification for the
 // scheme (https://www.iana.org/assignments/uri-schemes/prov/redis).
+//
+// Deprecated: This package is replaced by github.com/gomodule/redigo/redis.
 func DialURL(rawurl string, options ...DialOption) (Conn, error) {
 	u, err := url.Parse(rawurl)
 	if err != nil {
@@ -291,6 +295,8 @@ func DialURL(rawurl string, options ...DialOption) (Conn, error) {
 }
 
 // NewConn returns a new Redigo connection for the given net connection.
+//
+// Deprecated: This package is replaced by github.com/gomodule/redigo/redis.
 func NewConn(netConn net.Conn, readTimeout, writeTimeout time.Duration) Conn {
 	return &conn{
 		conn:         netConn,
